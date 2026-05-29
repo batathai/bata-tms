@@ -645,12 +645,13 @@ function showLoading() {
 
 function renderContent() {
   const el = document.getElementById('mainContent');
-  const data = S.nav==='invoice' ? S.manifests : S.manifests;
-  if      (S.nav==='delivery') { el.innerHTML = renderDelivery(); return; }
-  if      (S.nav==='synclog')  { el.innerHTML = renderSyncLog(); loadSyncLogs(); return; }
-  if      (S.tab==='main')     el.innerHTML = renderDashboard();
-  else if (S.tab==='region')   el.innerHTML = renderByRegion();
-  else                          el.innerHTML = renderTable();
+  if (S.nav==='delivery') { el.innerHTML = renderDelivery(); return; }
+  if (S.nav==='synclog')  { el.innerHTML = renderSyncLog(); loadSyncLogs(); return; }
+  if (S.nav==='manifest') { el.innerHTML = renderManifestReport(); return; }
+  if (S.nav==='invoice')  { el.innerHTML = renderInvoiceDetail(); return; }
+  if      (S.tab==='main')   el.innerHTML = renderDashboard();
+  else if (S.tab==='region') el.innerHTML = renderByRegion();
+  else                        el.innerHTML = renderTable();
 }
 
 function calcSummary(data) {
@@ -770,6 +771,105 @@ function renderTable() {
       <td>${statusPill(r.status||r.delivery_status||'pending')}</td>
     </tr>`;
   }).join('')}</tbody></table></div></div>`;
+}
+
+
+function renderManifestReport() {
+  const q = (document.getElementById('srchManifest')?.value||'').toLowerCase();
+  let data = S.manifests;
+  if (q) data = data.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
+
+  // Group by manifest_no
+  const groups = {};
+  data.forEach(r => {
+    const key = r.manifest_no || r['Manifest No.'] || '-';
+    if (!groups[key]) groups[key] = { manifest_no: key, final_no: r.final_no||r['Final No.']||'', gate_no: r.gate_no||r['Gate No.']||'', region: r.region||r['Region']||'', region_name: r.region_name||r['Region Name']||'', manifest_date: r.manifest_date||'', rows: [] };
+    groups[key].rows.push(r);
+  });
+
+  const clsMap={'กทม.':'bkk',อีสาน:'east',เหนือ:'north',ใต้:'south',กลาง:'central',Wholesale:'ws'};
+
+  return `<div class="table-wrap">
+    <div class="table-header">
+      <div class="table-title">📋 Manifest Report</div>
+      <div class="badge">${Object.keys(groups).length} Manifest / ${data.length} Invoice</div>
+      <input id="srchManifest" class="search-box" placeholder="🔍 ค้นหา..." oninput="renderContent()" value="${q}">
+    </div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr>
+      <th>#</th><th>Manifest No.</th><th>Final No.</th><th>Gate No.</th><th>Region</th><th>วันที่</th>
+      <th class="right">Invoice</th><th class="right">กล่องใหญ่</th><th class="right">กล่องเล็ก</th><th class="right">รวมกล่อง</th>
+      <th class="right">ส่งแล้ว</th><th class="right">กำลังส่ง</th><th class="right">ปัญหา</th>
+    </tr></thead><tbody>
+    ${Object.values(groups).map((g,i) => {
+      const big = g.rows.reduce((s,r)=>s+(r.big_carton||0),0);
+      const small = g.rows.reduce((s,r)=>s+(r.small_carton||0),0);
+      const total = g.rows.reduce((s,r)=>s+(r.total_carton||0),0);
+      const delivered = g.rows.filter(r=>(r.delivery_status||r.status)==='delivered').length;
+      const delivering = g.rows.filter(r=>(r.delivery_status||r.status)==='delivering').length;
+      const problem = g.rows.filter(r=>(r.delivery_status||r.status)==='problem').length;
+      const cls = clsMap[g.region]||'ws';
+      return `<tr>
+        <td class="center mono" style="color:var(--text2)">${i+1}</td>
+        <td class="mono" style="font-weight:600;color:var(--accent)">${g.manifest_no}</td>
+        <td class="mono">${g.final_no}</td>
+        <td class="mono">${g.gate_no}</td>
+        <td><span class="region-tag tag-${cls}">${g.region}</span></td>
+        <td class="mono">${g.manifest_date}</td>
+        <td class="right mono">${g.rows.length}</td>
+        <td class="right mono">${big.toLocaleString()}</td>
+        <td class="right mono">${small.toLocaleString()}</td>
+        <td class="right mono" style="font-weight:600">${total.toLocaleString()}</td>
+        <td class="right mono" style="color:var(--green)">${delivered}</td>
+        <td class="right mono" style="color:var(--accent)">${delivering}</td>
+        <td class="right mono" style="color:var(--red,#e74c3c)">${problem}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div></div>`;
+}
+
+function renderInvoiceDetail() {
+  const q = (document.getElementById('srchInvoice')?.value||'').toLowerCase();
+  let data = S.manifests;
+  if (q) data = data.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
+  const clsMap={'กทม.':'bkk',อีสาน:'east',เหนือ:'north',ใต้:'south',กลาง:'central',Wholesale:'ws'};
+
+  return `<div class="table-wrap">
+    <div class="table-header">
+      <div class="table-title">🧾 Invoice Detail</div>
+      <div class="badge">${data.length} รายการ</div>
+      <input id="srchInvoice" class="search-box" placeholder="🔍 ค้นหา Invoice / Store..." oninput="renderContent()" value="${q}">
+    </div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr>
+      <th>#</th><th>Invoice</th><th>Store</th><th>Store Name</th><th>Region</th>
+      <th>Manifest No.</th><th>Final No.</th><th>Gate No.</th><th>วันที่ Pack</th><th>วันที่ Manifest</th>
+      <th class="right">กล่องใหญ่</th><th class="right">กล่องเล็ก</th><th class="right">รวม</th>
+      <th class="right">Ord Prs</th><th class="right">Final Prs</th><th class="right">Total Final</th>
+      <th>สถานะ</th>
+    </tr></thead><tbody>
+    ${data.map((r,i) => {
+      const reg = r.region||r['Region']||'';
+      const cls = clsMap[reg]||'ws';
+      return `<tr>
+        <td class="center mono" style="color:var(--text2)">${i+1}</td>
+        <td class="mono" style="color:var(--accent);font-weight:600">${r.invoice_no||''}</td>
+        <td class="mono">${r.store_id||''}</td>
+        <td>${r.store_name||''}</td>
+        <td><span class="region-tag tag-${cls}">${reg}</span></td>
+        <td class="mono">${r.manifest_no||''}</td>
+        <td class="mono">${r.final_no||''}</td>
+        <td class="mono">${r.gate_no||''}</td>
+        <td class="mono">${r.pack_date||''}</td>
+        <td class="mono">${r.manifest_date||''}</td>
+        <td class="right mono">${(r.big_carton||0).toLocaleString()}</td>
+        <td class="right mono">${(r.small_carton||0).toLocaleString()}</td>
+        <td class="right mono" style="font-weight:600">${(r.total_carton||0).toLocaleString()}</td>
+        <td class="right mono">${(r.ord_prs||0).toLocaleString()}</td>
+        <td class="right mono">${(r.final_prs||0).toLocaleString()}</td>
+        <td class="right mono" style="font-weight:600">${(r.total_final||0).toLocaleString()}</td>
+        <td>${statusPill(r.delivery_status||r.status||'pending')}</td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div></div>`;
 }
 
 function renderDelivery() {
