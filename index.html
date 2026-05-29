@@ -417,7 +417,7 @@ function startPolling() {
   pollingTimer = setInterval(async () => {
     if (!S.user) return;
     try {
-      const fresh = await db.select('delivery_status', 'order=updated_at.desc');
+      const fresh = await db.select('delivery_status', `manifest_date=eq.${S.dateISO}&order=updated_at.desc`);
       if (JSON.stringify(fresh) !== JSON.stringify(S.delivery)) {
         S.delivery = fresh || [];
         if (S.nav === 'delivery') renderContent();
@@ -499,7 +499,7 @@ async function loadData() {
 async function loadFromSupabase() {
   try {
     // ดึงจาก delivery_status (ตารางเดียวกับ logistic)
-    const data = await db.select('delivery_status', 'order=manifest_id.asc');
+    const data = await db.select('delivery_status', `manifest_date=eq.${S.dateISO}&order=invoice_no.asc`);
     if (data && data.length > 0) {
       S.manifests = data;
       setSupStatus('ok', '⬤ Supabase Live');
@@ -518,7 +518,7 @@ async function loadFromSupabase() {
 
 async function loadDeliveryStatus() {
   try {
-    const data = await db.select('delivery_status', 'order=updated_at.desc');
+    const data = await db.select('delivery_status', `manifest_date=eq.${S.dateISO}&order=updated_at.desc`);
     S.delivery = data || [];
     // Merge สถานะเข้า manifests
     updateDeliveryInManifests(S.delivery);
