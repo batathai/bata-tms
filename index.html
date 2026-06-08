@@ -9,22 +9,23 @@
 <!-- ไม่ใช้ @supabase/supabase-js library — ใช้ REST API ตรงๆ แทน (ป้องกัน DataCloneError) -->
 <style>
 :root{
-  --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--border:#252a38;
-  --accent:#f0a500;--text:#e8eaf0;--text2:#8892a4;
-  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--orange:#f97316;
+  --bg:#f5f5f5;--bg2:#ffffff;--bg3:#f5f5f5;--border:#e0e0e0;
+  --accent:#CC0000;--text:#1a1a1a;--text2:#666666;
+  --green:#16a34a;--red:#CC0000;--blue:#1d4ed8;--purple:#7c3aed;--orange:#ea580c;
+  --bata-red:#CC0000;--bata-red-light:#fff0f0;--bata-red-border:#ffcccc;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans Thai',sans-serif;font-size:14px;}
 
 /* ── Login ── */
-#loginScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;}
-.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:360px;text-align:center;}
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#CC0000,#880000);display:flex;align-items:center;justify-content:center;z-index:999;}
+.login-box{background:#ffffff;border:none;border-radius:16px;padding:48px 40px;width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.2);}
 .login-logo{font-size:36px;font-weight:700;color:var(--accent);}
 .login-sub{color:var(--text2);margin:6px 0 8px;font-size:13px;}
 .sup-status{font-size:12px;margin-bottom:20px;padding:5px 12px;border-radius:20px;display:inline-block;}
 .sup-ok{background:#0f2a1a;color:var(--green);border:1px solid #1e4d2b;}
 .sup-err{background:#2d1a0e;color:var(--orange);border:1px solid #4d2e10;}
-.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;transition:border .2s;}
+.inp{width:100%;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:11px 14px;color:#1a1a1a;font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;transition:border .2s;}
 .inp:focus{border-color:var(--accent);}
 .btn-login{width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;}
 .login-err{color:var(--red);font-size:12px;margin-top:10px;min-height:18px;}
@@ -33,40 +34,40 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans Thai',san
 #app{display:none;height:100vh;flex-direction:column;overflow:hidden;}
 #app.show{display:flex;}
 
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;height:54px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
-.logo{font-size:18px;font-weight:700;color:var(--accent);}
+.topbar{background:#CC0000;border-bottom:1px solid #aa0000;padding:0 20px;height:54px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.logo{font-size:18px;font-weight:700;color:#ffffff;letter-spacing:1px;}
 .role-badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;}
-.role-warehouse{background:#1a2240;color:var(--blue);}
-.role-admin{background:#221a2d;color:var(--purple);}
+.role-warehouse{background:rgba(255,255,255,0.2);color:#ffffff;}
+.role-admin{background:rgba(255,255,255,0.3);color:#ffffff;}
 .sup-dot{font-size:12px;font-family:'IBM Plex Mono',monospace;padding:3px 10px;border-radius:20px;}
-.sup-dot.ok{background:#0f2a1a;color:var(--green);}
-.sup-dot.err{background:#2d1a0e;color:var(--orange);}
-.sup-dot.syncing{background:#1e1a10;color:var(--accent);}
+.sup-dot.ok{background:rgba(255,255,255,0.2);color:#ffffff;}
+.sup-dot.err{background:rgba(0,0,0,0.25);color:#ffdddd;}
+.sup-dot.syncing{background:rgba(255,255,255,0.15);color:#ffffff;}
 .ml-auto{margin-left:auto;}
 .gap{display:flex;gap:8px;align-items:center;}
-.btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .2s;white-space:nowrap;}
-.btn:hover{border-color:var(--accent);color:var(--text);}
-.btn-primary{background:var(--accent);border:none;color:#000;font-weight:700;}
-.btn-primary:hover{opacity:.85;}
+.btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.35);color:#ffffff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .2s;white-space:nowrap;}
+.btn:hover{background:rgba(255,255,255,0.25);}
+.btn-primary{background:#ffffff;border:none;color:#CC0000;font-weight:700;}
+.btn-primary:hover{opacity:.9;}
 
 /* ── Body ── */
 .body{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
+.sidebar{width:220px;background:#ffffff;border-right:1px solid #e0e0e0;display:flex;flex-direction:column;flex-shrink:0;}
 .date-section{padding:14px;border-bottom:1px solid var(--border);}
 .date-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
-.date-display{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:15px;font-weight:600;color:var(--accent);font-family:'IBM Plex Mono',monospace;transition:border .2s;}
+.date-display{background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:15px;font-weight:600;color:#CC0000;font-family:'IBM Plex Mono',monospace;transition:border .2s;}
 .date-display:hover{border-color:var(--accent);}
-input[type=date]{width:100%;background:var(--bg3);border:1px solid var(--accent);border-radius:8px;padding:8px 10px;color:var(--text);font-family:inherit;font-size:13px;outline:none;margin-top:6px;color-scheme:dark;}
+input[type=date]{width:100%;background:#fff0f0;border:1px solid #CC0000;border-radius:8px;padding:8px 10px;color:#1a1a1a;font-family:inherit;font-size:13px;outline:none;margin-top:6px;}
 
 .nav-section{flex:1;padding:10px 8px;overflow-y:auto;}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;transition:all .15s;margin-bottom:2px;}
-.nav-item:hover{background:var(--bg3);color:var(--text);}
-.nav-item.active{background:#1e1a0f;color:var(--accent);font-weight:600;}
+.nav-item:hover{background:#fff5f5;color:#CC0000;}
+.nav-item.active{background:#fff0f0;color:#CC0000;font-weight:600;border-left:3px solid #CC0000;padding-left:9px;}
 .nav-icon{font-size:16px;width:20px;text-align:center;}
 
-.sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);}
+.sidebar-footer{padding:12px 14px;border-top:1px solid #e0e0e0;}
 .user-row{display:flex;align-items:center;gap:10px;}
-.user-avatar{width:32px;height:32px;background:var(--accent);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
+.user-avatar{width:32px;height:32px;background:#CC0000;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
 .user-name{font-size:13px;font-weight:500;}
 .user-role{font-size:11px;color:var(--text2);}
 .btn-logout{margin-left:auto;background:none;border:none;color:var(--text2);cursor:pointer;font-size:18px;}
@@ -74,25 +75,25 @@ input[type=date]{width:100%;background:var(--bg3);border:1px solid var(--accent)
 
 /* ── Main ── */
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;}
-.tab-bar{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:4px;height:44px;flex-shrink:0;}
+.tab-bar{background:#ffffff;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;padding:0 16px;gap:4px;height:44px;flex-shrink:0;}
 .tab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;font-weight:500;}
-.tab:hover{color:var(--text);background:var(--bg3);}
-.tab.active{color:var(--accent);background:#1e1a0f;}
+.tab:hover{color:#CC0000;background:#fff5f5;}
+.tab.active{color:#CC0000;background:#fff0f0;border-bottom:2px solid #CC0000;}
 .content{flex:1;overflow:auto;padding:18px;}
 
 /* ── Cards ── */
 .sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
-.sum-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+.sum-card{background:#ffffff;border:0.5px solid #e0e0e0;border-top:3px solid #e0e0e0;border-radius:10px;padding:14px 16px;}
 .sum-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;}
 .sum-value{font-size:26px;font-weight:700;margin:4px 0 2px;font-family:'IBM Plex Mono',monospace;}
 .sum-sub{font-size:12px;color:var(--text2);}
-.sum-card.gold .sum-value{color:var(--accent);}
-.sum-card.green .sum-value{color:var(--green);}
-.sum-card.blue .sum-value{color:var(--blue);}
-.sum-card.orange .sum-value{color:var(--orange);}
+.sum-card.gold{border-top-color:#CC0000;}.sum-card.gold .sum-value{color:#CC0000;}
+.sum-card.green{border-top-color:#16a34a;}.sum-card.green .sum-value{color:#16a34a;}
+.sum-card.blue{border-top-color:#1d4ed8;}.sum-card.blue .sum-value{color:#1d4ed8;}
+.sum-card.orange{border-top-color:#ea580c;}.sum-card.orange .sum-value{color:#ea580c;}
 
 /* ── Sync status bar ── */
-.sync-bar{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;font-size:12px;}
+.sync-bar{background:#fff0f0;border:0.5px solid #ffcccc;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;font-size:12px;color:#CC0000;}
 .sync-bar-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .dot-green{background:var(--green);}
 .dot-orange{background:var(--orange);}
@@ -101,7 +102,7 @@ input[type=date]{width:100%;background:var(--bg3);border:1px solid var(--accent)
 
 /* ── Delivery progress ── */
 .delivery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:18px;}
-.del-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.del-card{background:#ffffff;border:0.5px solid #e0e0e0;border-radius:10px;padding:12px 14px;}
 .del-route{font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
 .del-store{font-size:13px;font-weight:600;margin-bottom:6px;}
 .del-progress{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:4px;}
@@ -115,35 +116,35 @@ input[type=date]{width:100%;background:var(--bg3);border:1px solid var(--accent)
 .del-stat-err{color:var(--red);}
 
 /* ── Table ── */
-.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.table-wrap{background:#ffffff;border:0.5px solid #e0e0e0;border-radius:10px;overflow:hidden;}
 .table-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
 .table-title{font-weight:600;}
 .badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--text2);font-family:'IBM Plex Mono',monospace;}
-.search-box{margin-left:auto;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;width:200px;}
+.search-box{margin-left:auto;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:6px;padding:6px 12px;color:#1a1a1a;font-size:13px;font-family:inherit;outline:none;width:200px;}
 .search-box:focus{border-color:var(--accent);}
 .tbl{width:100%;border-collapse:collapse;}
-.tbl th{background:var(--bg3);padding:9px 12px;text-align:left;font-size:11px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1px solid var(--border);}
-.tbl td{padding:9px 12px;border-bottom:1px solid #1a1e28;font-size:13px;white-space:nowrap;}
+.tbl th{background:#CC0000;padding:9px 12px;text-align:left;font-size:11px;color:#ffffff;font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1px solid #aa0000;}
+.tbl td{padding:9px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;white-space:nowrap;}
 .tbl tr:last-child td{border-bottom:none;}
-.tbl tr:hover td{background:#13161e;}
+.tbl tr:hover td{background:#fff5f5;}
 .tbl td.mono{font-family:'IBM Plex Mono',monospace;}
 .tbl td.right{text-align:right;}
 .tbl td.center{text-align:center;}
 
 .status-pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;}
-.st-pending{background:#1a2240;color:var(--text2);}
-.st-accepted{background:#1a2240;color:var(--blue);}
-.st-delivering{background:#2a1a0a;color:var(--orange);}
-.st-delivered{background:#0f2a1a;color:var(--green);}
-.st-problem{background:#2a0f0f;color:var(--red);}
+.st-pending{background:#f3f4f6;color:#6b7280;}
+.st-accepted{background:#dbeafe;color:#1d4ed8;}
+.st-delivering{background:#fff7ed;color:#ea580c;}
+.st-delivered{background:#dcfce7;color:#16a34a;}
+.st-problem{background:#fee2e2;color:#CC0000;}
 
 .region-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;}
-.tag-bkk{background:#1a2240;color:#7aadff;}
-.tag-east{background:#1f2a10;color:#86efac;}
-.tag-north{background:#221a2d;color:#d8b4fe;}
-.tag-south{background:#2d1a1a;color:#fca5a5;}
-.tag-central{background:#1f2210;color:#fde68a;}
-.tag-ws{background:#1e1a10;color:var(--accent);}
+.tag-bkk{background:#dbeafe;color:#1d4ed8;}
+.tag-east{background:#dcfce7;color:#16a34a;}
+.tag-north{background:#f3e8ff;color:#7c3aed;}
+.tag-south{background:#fee2e2;color:#CC0000;}
+.tag-central{background:#fef9c3;color:#854d0e;}
+.tag-ws{background:#fff0f0;color:#CC0000;}
 
 /* ── Loading/Empty ── */
 .loading-box,.empty-box{text-align:center;padding:60px 20px;color:var(--text2);}
@@ -152,24 +153,24 @@ input[type=date]{width:100%;background:var(--bg3);border:1px solid var(--accent)
 
 /* ── Toast ── */
 #toast{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
-.toast-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 16px;font-size:13px;min-width:240px;animation:tin .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4);}
-.toast-item.ok{border-color:var(--green);}
-.toast-item.err{border-color:var(--red);}
+.toast-item{background:#ffffff;border:0.5px solid #e0e0e0;border-radius:8px;padding:11px 16px;font-size:13px;min-width:240px;animation:tin .2s ease;box-shadow:0 4px 16px rgba(0,0,0,.12);color:#1a1a1a;}
+.toast-item.ok{border-color:#16a34a;}
+.toast-item.err{border-color:#CC0000;}
 @keyframes tin{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 
 /* ── Settings ── */
 #settingsModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;}
 #settingsModal.show{display:flex;}
-.settings-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:480px;max-height:80vh;overflow-y:auto;}
-.settings-header{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.settings-header h3{font-size:15px;font-weight:600;}
-.btn-close{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;}
+.settings-box{background:#ffffff;border:0.5px solid #e0e0e0;border-radius:14px;width:480px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
+.settings-header{padding:18px 22px 14px;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;background:#CC0000;border-radius:14px 14px 0 0;}
+.settings-header h3{font-size:15px;font-weight:600;color:#ffffff;}
+.btn-close{background:none;border:none;color:#ffffff;font-size:20px;cursor:pointer;}
 .settings-body{padding:18px 22px;}
 .field-group{margin-bottom:16px;}
 .field-label{font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500;}
-.field-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;}
+.field-input{width:100%;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:9px 12px;color:#1a1a1a;font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;}
 .field-input:focus{border-color:var(--accent);}
-.settings-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+.settings-footer{padding:14px 22px;border-top:1px solid #e0e0e0;display:flex;gap:10px;justify-content:flex-end;}
 </style>
 </head>
 <body>
@@ -417,7 +418,7 @@ function startPolling() {
   pollingTimer = setInterval(async () => {
     if (!S.user) return;
     try {
-      const fresh = await db.select('delivery_status', `manifest_date=eq.${S.dateISO}&order=updated_at.desc`);
+      const fresh = await db.select('delivery_status', 'order=updated_at.desc');
       if (JSON.stringify(fresh) !== JSON.stringify(S.delivery)) {
         S.delivery = fresh || [];
         if (S.nav === 'delivery') renderContent();
@@ -499,7 +500,7 @@ async function loadData() {
 async function loadFromSupabase() {
   try {
     // ดึงจาก delivery_status (ตารางเดียวกับ logistic)
-    const data = await db.select('delivery_status', `manifest_date=eq.${S.dateISO}&order=invoice_no.asc`);
+    const data = await db.select('delivery_status', 'order=manifest_id.asc');
     if (data && data.length > 0) {
       S.manifests = data;
       setSupStatus('ok', '⬤ Supabase Live');
@@ -518,7 +519,7 @@ async function loadFromSupabase() {
 
 async function loadDeliveryStatus() {
   try {
-    const data = await db.select('delivery_status', `manifest_date=eq.${S.dateISO}&order=updated_at.desc`);
+    const data = await db.select('delivery_status', 'order=updated_at.desc');
     S.delivery = data || [];
     // Merge สถานะเข้า manifests
     updateDeliveryInManifests(S.delivery);
@@ -645,13 +646,12 @@ function showLoading() {
 
 function renderContent() {
   const el = document.getElementById('mainContent');
-  if (S.nav==='delivery') { el.innerHTML = renderDelivery(); return; }
-  if (S.nav==='synclog')  { el.innerHTML = renderSyncLog(); loadSyncLogs(); return; }
-  if (S.nav==='manifest') { el.innerHTML = renderManifestReport(); return; }
-  if (S.nav==='invoice')  { el.innerHTML = renderInvoiceDetail(); return; }
-  if      (S.tab==='main')   el.innerHTML = renderDashboard();
-  else if (S.tab==='region') el.innerHTML = renderByRegion();
-  else                        el.innerHTML = renderTable();
+  const data = S.nav==='invoice' ? S.manifests : S.manifests;
+  if      (S.nav==='delivery') { el.innerHTML = renderDelivery(); return; }
+  if      (S.nav==='synclog')  { el.innerHTML = renderSyncLog(); loadSyncLogs(); return; }
+  if      (S.tab==='main')     el.innerHTML = renderDashboard();
+  else if (S.tab==='region')   el.innerHTML = renderByRegion();
+  else                          el.innerHTML = renderTable();
 }
 
 function calcSummary(data) {
@@ -661,6 +661,8 @@ function calcSummary(data) {
     bigCarton:   data.reduce((s,r)=>s+(r.big_box||r.big_carton||r['Big Carton']||0),0),
     smallCarton: data.reduce((s,r)=>s+(r.small_box||r.small_carton||r['Small Carton']||0),0),
     totalCarton: data.reduce((s,r)=>s+(r.big_box||r.big_carton||0)+(r.small_box||r.small_carton||0),0),
+    totalPairs:  data.reduce((s,r)=>s+(r.total_final||r['Total Final']||0),0),
+    ordPairs:    data.reduce((s,r)=>s+(r.total_ord||r['Total Ord']||0),0),
   };
 }
 
@@ -685,11 +687,12 @@ function renderDashboard() {
     <div style="color:var(--green);font-weight:600;font-family:'IBM Plex Mono',monospace;font-size:12px;">${pct}%</div>
     <div style="margin-left:12px;color:var(--text2)">🔄 Sync ทุก 15 วิ</div>
   </div>
-  <div class="sum-grid">
+  <div class="sum-grid" style="grid-template-columns:repeat(5,1fr)">
     <div class="sum-card gold"><div class="sum-label">Manifest รวม</div><div class="sum-value">${s.manifests}</div><div class="sum-sub">${total} Invoice</div></div>
     <div class="sum-card green"><div class="sum-label">ส่งแล้ว</div><div class="sum-value">${delivered}</div><div class="sum-sub">${pct}% สำเร็จ</div></div>
     <div class="sum-card orange"><div class="sum-label">กำลังส่ง</div><div class="sum-value">${delivering}</div><div class="sum-sub">รอ ${pending} · ปัญหา ${problem}</div></div>
     <div class="sum-card blue"><div class="sum-label">กล่องรวม</div><div class="sum-value">${s.totalCarton.toLocaleString()}</div><div class="sum-sub">ใหญ่ ${s.bigCarton} / เล็ก ${s.smallCarton}</div></div>
+    <div class="sum-card" style="border-top-color:#CC0000"><div class="sum-label" style="color:#CC0000">คู่รวม</div><div class="sum-value" style="color:#CC0000">${s.totalPairs.toLocaleString()}</div><div class="sum-sub">สั่ง ${s.ordPairs.toLocaleString()} คู่</div></div>
   </div>
   ${renderRegionCards()}`;
 }
@@ -771,105 +774,6 @@ function renderTable() {
       <td>${statusPill(r.status||r.delivery_status||'pending')}</td>
     </tr>`;
   }).join('')}</tbody></table></div></div>`;
-}
-
-
-function renderManifestReport() {
-  const q = (document.getElementById('srchManifest')?.value||'').toLowerCase();
-  let data = S.manifests;
-  if (q) data = data.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
-
-  // Group by manifest_no
-  const groups = {};
-  data.forEach(r => {
-    const key = r.manifest_no || r['Manifest No.'] || '-';
-    if (!groups[key]) groups[key] = { manifest_no: key, final_no: r.final_no||r['Final No.']||'', gate_no: r.gate_no||r['Gate No.']||'', region: r.region||r['Region']||'', region_name: r.region_name||r['Region Name']||'', manifest_date: r.manifest_date||'', rows: [] };
-    groups[key].rows.push(r);
-  });
-
-  const clsMap={'กทม.':'bkk',อีสาน:'east',เหนือ:'north',ใต้:'south',กลาง:'central',Wholesale:'ws'};
-
-  return `<div class="table-wrap">
-    <div class="table-header">
-      <div class="table-title">📋 Manifest Report</div>
-      <div class="badge">${Object.keys(groups).length} Manifest / ${data.length} Invoice</div>
-      <input id="srchManifest" class="search-box" placeholder="🔍 ค้นหา..." oninput="renderContent()" value="${q}">
-    </div>
-    <div style="overflow-x:auto"><table class="tbl"><thead><tr>
-      <th>#</th><th>Manifest No.</th><th>Final No.</th><th>Gate No.</th><th>Region</th><th>วันที่</th>
-      <th class="right">Invoice</th><th class="right">กล่องใหญ่</th><th class="right">กล่องเล็ก</th><th class="right">รวมกล่อง</th>
-      <th class="right">ส่งแล้ว</th><th class="right">กำลังส่ง</th><th class="right">ปัญหา</th>
-    </tr></thead><tbody>
-    ${Object.values(groups).map((g,i) => {
-      const big = g.rows.reduce((s,r)=>s+(r.big_carton||0),0);
-      const small = g.rows.reduce((s,r)=>s+(r.small_carton||0),0);
-      const total = g.rows.reduce((s,r)=>s+(r.total_carton||0),0);
-      const delivered = g.rows.filter(r=>(r.delivery_status||r.status)==='delivered').length;
-      const delivering = g.rows.filter(r=>(r.delivery_status||r.status)==='delivering').length;
-      const problem = g.rows.filter(r=>(r.delivery_status||r.status)==='problem').length;
-      const cls = clsMap[g.region]||'ws';
-      return `<tr>
-        <td class="center mono" style="color:var(--text2)">${i+1}</td>
-        <td class="mono" style="font-weight:600;color:var(--accent)">${g.manifest_no}</td>
-        <td class="mono">${g.final_no}</td>
-        <td class="mono">${g.gate_no}</td>
-        <td><span class="region-tag tag-${cls}">${g.region}</span></td>
-        <td class="mono">${g.manifest_date}</td>
-        <td class="right mono">${g.rows.length}</td>
-        <td class="right mono">${big.toLocaleString()}</td>
-        <td class="right mono">${small.toLocaleString()}</td>
-        <td class="right mono" style="font-weight:600">${total.toLocaleString()}</td>
-        <td class="right mono" style="color:var(--green)">${delivered}</td>
-        <td class="right mono" style="color:var(--accent)">${delivering}</td>
-        <td class="right mono" style="color:var(--red,#e74c3c)">${problem}</td>
-      </tr>`;
-    }).join('')}
-    </tbody></table></div></div>`;
-}
-
-function renderInvoiceDetail() {
-  const q = (document.getElementById('srchInvoice')?.value||'').toLowerCase();
-  let data = S.manifests;
-  if (q) data = data.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
-  const clsMap={'กทม.':'bkk',อีสาน:'east',เหนือ:'north',ใต้:'south',กลาง:'central',Wholesale:'ws'};
-
-  return `<div class="table-wrap">
-    <div class="table-header">
-      <div class="table-title">🧾 Invoice Detail</div>
-      <div class="badge">${data.length} รายการ</div>
-      <input id="srchInvoice" class="search-box" placeholder="🔍 ค้นหา Invoice / Store..." oninput="renderContent()" value="${q}">
-    </div>
-    <div style="overflow-x:auto"><table class="tbl"><thead><tr>
-      <th>#</th><th>Invoice</th><th>Store</th><th>Store Name</th><th>Region</th>
-      <th>Manifest No.</th><th>Final No.</th><th>Gate No.</th><th>วันที่ Pack</th><th>วันที่ Manifest</th>
-      <th class="right">กล่องใหญ่</th><th class="right">กล่องเล็ก</th><th class="right">รวม</th>
-      <th class="right">Ord Prs</th><th class="right">Final Prs</th><th class="right">Total Final</th>
-      <th>สถานะ</th>
-    </tr></thead><tbody>
-    ${data.map((r,i) => {
-      const reg = r.region||r['Region']||'';
-      const cls = clsMap[reg]||'ws';
-      return `<tr>
-        <td class="center mono" style="color:var(--text2)">${i+1}</td>
-        <td class="mono" style="color:var(--accent);font-weight:600">${r.invoice_no||''}</td>
-        <td class="mono">${r.store_id||''}</td>
-        <td>${r.store_name||''}</td>
-        <td><span class="region-tag tag-${cls}">${reg}</span></td>
-        <td class="mono">${r.manifest_no||''}</td>
-        <td class="mono">${r.final_no||''}</td>
-        <td class="mono">${r.gate_no||''}</td>
-        <td class="mono">${r.pack_date||''}</td>
-        <td class="mono">${r.manifest_date||''}</td>
-        <td class="right mono">${(r.big_carton||0).toLocaleString()}</td>
-        <td class="right mono">${(r.small_carton||0).toLocaleString()}</td>
-        <td class="right mono" style="font-weight:600">${(r.total_carton||0).toLocaleString()}</td>
-        <td class="right mono">${(r.ord_prs||0).toLocaleString()}</td>
-        <td class="right mono">${(r.final_prs||0).toLocaleString()}</td>
-        <td class="right mono" style="font-weight:600">${(r.total_final||0).toLocaleString()}</td>
-        <td>${statusPill(r.delivery_status||r.status||'pending')}</td>
-      </tr>`;
-    }).join('')}
-    </tbody></table></div></div>`;
 }
 
 function renderDelivery() {
